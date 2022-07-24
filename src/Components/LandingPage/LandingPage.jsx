@@ -41,7 +41,7 @@ export default function LandingPage() {
 
   return (
     <Container className="mt-5 container-md w-75">
-      <h1>Landing Page</h1>
+      <h1 className="text-center">Landing Page</h1>
       {mockPosts
         .filter((post, i) => post.id <= 5)
         .map((post) => (
