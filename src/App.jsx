@@ -1,5 +1,6 @@
 /* Libraries */
 import { Routes, Route } from "react-router-dom";
+import { v4 as uuidv4 } from "uuid";
 
 /* Other imports */
 import "./App.css";
@@ -37,7 +38,12 @@ export default function App() {
       <main>
         <Routes>
           {menuPoints.map((elem) => (
-            <Route path={`${elem.route}`} exact element={elem.element} />
+            <Route
+              key={uuidv4()}
+              path={`${elem.route}`}
+              exact
+              element={elem.element}
+            />
           ))}
           <Route
             path="*"
