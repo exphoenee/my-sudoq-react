@@ -4,6 +4,8 @@ import Container from "react-bootstrap/Container";
 import Nav from "react-bootstrap/Nav";
 import Navbar from "react-bootstrap/Navbar";
 import { Link } from "react-router-dom";
+import { v4 as uuidv4 } from "uuid";
+
 /* Components */
 
 export default function Header({ menuPoints }) {
@@ -15,7 +17,7 @@ export default function Header({ menuPoints }) {
         <Navbar.Collapse id="responsive-navbar-nav">
           <Nav className="me-auto">
             {menuPoints.map((elem) => (
-              <Link to={elem.route} className="nav-link">
+              <Link key={uuidv4()} to={elem.route} className="nav-link">
                 {elem.text}
               </Link>
             ))}
