@@ -6,6 +6,7 @@ import "./App.css";
 
 /* Components */
 import Header from "./Components/Header/Header";
+import Footer from "./Components/Footer/Footer";
 import LandingPage from "./Components/LandingPage/LandingPage";
 import EMailList from "./Components/EMailList/EMailList";
 import SudokuSolver from "./Components/SudokuSolver/SudokuSolver";
@@ -49,6 +50,7 @@ export default function App() {
         </Routes>
       </main>
       <footer></footer>
+      <Footer />
     </>
   );
 }
