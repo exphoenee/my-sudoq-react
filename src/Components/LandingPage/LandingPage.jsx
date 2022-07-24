@@ -5,7 +5,6 @@ import axios from "axios";
 import Container from "react-bootstrap/Container";
 import { v4 as uuidv4 } from "uuid";
 import Row from "react-bootstrap/Row";
-import Col from "react-bootstrap/Col";
 
 /* Other imports */
 
