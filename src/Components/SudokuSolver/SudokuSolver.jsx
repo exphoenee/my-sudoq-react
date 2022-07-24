@@ -18,15 +18,14 @@ export default function SudokuSolver() {
   const board = Array(9).fill(Array(9).fill(0));
   const [cellValues, setCellValues] = useState(board);
 
-  const handleChange = () => {
-    return;
+  const handleSolve = () => {
+    const solution = solver.solvePuzzle(cellValues);
+    setCellValues(solution);
   };
 
-  const solvePuzzle = () => {
-    setCellValues(solver.solvePuzzle(cellValues));
-  };
-
-  useEffect(() => {}, [cellValues]);
+  useEffect(() => {
+    console.log("hopika");
+  }, [cellValues]);
 
   return (
     <Container className="mt-5 container-md w-75">
@@ -39,12 +38,17 @@ export default function SudokuSolver() {
                 key={uuidv4()}
                 style={cellStyle}
                 type="number"
-                value={cellValues[y][x] > 1 ? cellValues[y][x] : ""}
+                value={cellValues[y][x] > 0 ? cellValues[y][x] : ""}
                 max="9"
                 min="1"
                 step="1"
                 className="tile"
-                onChange={() => handleChange}
+                onChange={(e) => {
+                  const newBoard = [...cellValues];
+                  console.log(newBoard);
+                  newBoard[y][x] = e.target.value;
+                  setCellValues(newBoard);
+                }}
               ></input>
             ))}
           </div>
@@ -68,7 +72,7 @@ export default function SudokuSolver() {
           key={uuidv4()}
           variant="dark"
           className="m-1"
-          onClick={() => solvePuzzle}
+          onClick={() => handleSolve()}
         >
           Solve!
         </Button>
@@ -97,7 +101,7 @@ const boardStyle = {
   width: "calc((3rem + 2 * 1px) * 9 + 24px)",
   aspectRatio: "1",
   padding: "2rem",
-  margin: "2rem auto",
+  margin: "2.5rem auto",
   borderRadius: "2rem",
   backgroundImage:
     "linear-gradient(60deg,rgba(50, 50, 50, 0.2),rgba(150, 150, 150, 0.2))",
