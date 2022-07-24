@@ -137,6 +137,7 @@ export class Solver {
       * the solved puzzle n x n sized 2D array
       * or a boolen which value can be only false what mean there is no solution for this puzzle */
   solvePuzzle(puzzle = null, format = "default") {
+    console.log("started");
     let startingPuzzle =
       this.#renderMyself && !puzzle ? this.#extractInputs() : puzzle;
 
