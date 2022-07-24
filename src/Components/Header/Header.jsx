@@ -10,7 +10,7 @@ import { v4 as uuidv4 } from "uuid";
 
 export default function Header({ menuPoints }) {
   return (
-    <Navbar collapseOnSelect expand="lg" bg="dark" variant="dark">
+    <Navbar sticky="top" collapseOnSelect expand="lg" bg="dark" variant="dark">
       <Container>
         <Navbar.Brand href="/">Menu</Navbar.Brand>
         <Navbar.Toggle aria-controls="responsive-navbar-nav" />
