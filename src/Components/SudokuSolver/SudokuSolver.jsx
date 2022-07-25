@@ -35,6 +35,10 @@ export default function SudokuSolver() {
     return +value >= 1 && +value <= sudokuSize ? +value : unfilledValue;
   };
 
+  const cloneCellValues = () => {
+    return cellValues.map((row) => row.map((elem) => elem));
+  };
+
   const handleCellChange = (e, x, y) => {
     e.preventDefault();
     /*it's strange I couldn't make a clon with
@@ -42,18 +46,13 @@ export default function SudokuSolver() {
       syntax, therefore I made a double times mapped array.
       Te last try would be the
         ** let newBoard = JSON.parse(JSON.stringify(cellValues)) */
-    let newBoard = cellValues.map((row) => row.map((elem) => elem));
+    let newBoard = cloneCellValues;
     newBoard[y][x] = validateValue(+e.target.value, "");
     setCellValues(newBoard);
   };
 
   const handleSolve = () => {
-    const puzzle = cellValues
-      .map((row) => row.join(""))
-      .join("")
-      .replace(/0/g, ".");
-
-    console.log(puzzle);
+    let solveFailed;
 
     setMessage({
       text: "...solving...",
@@ -62,6 +61,11 @@ export default function SudokuSolver() {
 
     let sovlable;
     if (apiSolver) {
+      const puzzle = cellValues
+        .map((row) => row.join(""))
+        .join("")
+        .replace(/0/g, ".");
+
       const options = {
         method: "POST",
         url: "https://solve-sudoku.p.rapidapi.com/",
@@ -82,16 +86,21 @@ export default function SudokuSolver() {
           setCellValues(solution);
         })
         .catch(function (error) {
+          solveFailed = true;
+          setMessage({
+            text: "Some error occured with the API! Check your API key!",
+            type: danger,
+          });
           console.error(error);
         });
     } else {
-      const solution = solver.solvePuzzle(cellValues);
+      const solution = solver.solvePuzzle(cloneCellValues());
       setCellValues(solution);
     }
 
     if (sovlable) {
       setMessage({ text: "Puzzle solved!", type: success });
-    } else {
+    } else if (solveFailed) {
       setMessage({
         text: "There is no solution for this puzzle!",
         type: danger,
@@ -104,7 +113,7 @@ export default function SudokuSolver() {
       text: "Let's solve sudoku!",
       type: light,
     });
-    console.log(cellValues);
+    //console.log(cellValues);
   }, [cellValues]);
 
   return (
@@ -161,6 +170,7 @@ const cellStyle = {
   outline: "none",
   border: "1px gray solid",
 };
+
 const boardStyle = {
   width: "calc((3rem + 2 * 1px) * 9 + 24px)",
   aspectRatio: "1",

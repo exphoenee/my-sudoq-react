@@ -138,7 +138,6 @@ export class Solver {
       * the solved puzzle n x n sized 2D array
       * or a boolen which value can be only false what mean there is no solution for this puzzle */
   solvePuzzle(puzzle = null, format = "default") {
-    console.log("started");
     let startingPuzzle =
       this.#renderMyself && !puzzle ? this.#extractInputs() : puzzle;
 
@@ -259,6 +258,10 @@ export class Solver {
     arg:    puzzle n x n sized 2D array
     return: a boolean true means the puzzle seems to solvable */
   isPuzzleCorrect(puzzle) {
+    //console.log(puzzle);
+    //console.log(this.#rowsCorrect(puzzle));
+    //console.log(this.#columnsCorrect(puzzle));
+    //console.log(this.#boxesCorrect(puzzle));
     return (
       this.#rowsCorrect(puzzle) &&
       this.#columnsCorrect(puzzle) &&
@@ -283,6 +286,7 @@ export class Solver {
       * a flattened box)
     return: a boolean true means the row doesn't has duplicates */
   #batchCorrect(batch) {
+    console.log(batch);
     const onlyNums = batch.filter((num) => this.#validateValue(num) !== 0);
     return new Set(onlyNums).size === onlyNums.length;
   }
@@ -352,7 +356,7 @@ export class Solver {
 
   /* check the n x n sized sections arg), the boxes, there is not replication of numbers present */
   #boxesCorrect(puzzle) {
-    let boxes = this.#getColumnsOfPuzzle(puzzle);
+    let boxes = this.#getBoxes(puzzle);
     return boxes.every((box) => this.#batchCorrect(box));
   }
 
