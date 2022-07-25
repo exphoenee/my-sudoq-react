@@ -18,7 +18,7 @@ import { Solver } from "../../Solver/Solver";
 /* Other imports */
 import { success, danger, light, info } from "../../Utils/MessageTypes";
 
-const solver = new Solver({ sectionSize: 3, renderMyself: false });
+const solver = new Solver({});
 
 export default function SudokuSolver() {
   const boxSize = 3;
@@ -94,10 +94,13 @@ export default function SudokuSolver() {
           console.error(error);
         });
     } else {
-      /* TODO: I must go now, later i will debug that mess */
       const puzzle = cloneCellValues();
       const solution = solver.solvePuzzle(puzzle);
-      setCellValues(solution);
+      if (solution === false) {
+        solveFailed = true;
+      } else if (Array.isArray(solution)) {
+        setCellValues(solution);
+      }
     }
 
     if (sovlable) {
