@@ -38,6 +38,16 @@ export default function LandingPage() {
   };
   */
 
+  const validatePageValue = (pageValue) => {
+    if (pageValue < 1) {
+      return 1;
+    } else if (pageValue > pageNr) {
+      return pageNr;
+    } else {
+      return pageValue;
+    }
+  };
+
   useEffect(() => {
     getPosts();
     //getImage();
@@ -51,14 +61,14 @@ export default function LandingPage() {
           <button
             type="button"
             className="btn btn-secondary"
-            onClick={() => setPage(page > 1 ? page - 1 : page)}
+            onClick={() => setPage(validatePageValue(page - 1))}
           >
             Previous
           </button>
           <button
             type="button"
             className="btn btn-secondary"
-            onClick={() => setPage(page < pageNr ? page + 1 : page)}
+            onClick={() => setPage(validatePageValue(page + 1))}
           >
             Next
           </button>
@@ -83,7 +93,7 @@ export default function LandingPage() {
               <option
                 key={uuidv4()}
                 selected={p === postsOnPage ? true : false}
-                defaultValue={p}
+                value={p}
               >
                 {p} post{p > 1 ? "s" : ""} / page
               </option>
