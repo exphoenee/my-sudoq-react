@@ -94,6 +94,7 @@ export default function SudokuSolver() {
           console.error(error);
         });
     } else {
+      /* TODO: I must go now, later i will debug that mess */
       const puzzle = cloneCellValues();
       const solution = solver.solvePuzzle(puzzle);
       setCellValues(solution);
