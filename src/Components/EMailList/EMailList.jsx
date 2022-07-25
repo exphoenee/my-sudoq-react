@@ -10,13 +10,11 @@ import Alert from "react-bootstrap/Alert";
 import axios from "axios";
 
 /* Other imports */
+import { success, danger, warning } from "../../Utils/MessageTypes";
 
 /* Components */
 
 export default function EMailList() {
-  const success = "success";
-  const danger = "danger";
-  const warning = "warning";
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [age, setAge] = useState("");
