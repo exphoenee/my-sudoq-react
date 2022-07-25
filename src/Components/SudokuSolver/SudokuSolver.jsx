@@ -19,12 +19,14 @@ import { Solver } from "../../Solver/Solver";
 import { success, danger, light, info } from "../../Utils/MessageTypes";
 
 const solver = new Solver({});
+const boxSize = 3;
+const sudokuSize = boxSize ** 2;
+const boxGap = "0.5rem";
 
 export default function SudokuSolver() {
-  const boxSize = 3;
-  const sudokuSize = boxSize ** 2;
   const board = Array(sudokuSize).fill(Array(sudokuSize).fill(0));
   const [cellValues, setCellValues] = useState(board);
+  const [givenCells, setGivenCells] = useState([]);
   const [apiSolver, setApiSolver] = useState(false);
   const [message, setMessage] = useState({
     text: "Let's solve sudoku!",
@@ -33,6 +35,10 @@ export default function SudokuSolver() {
 
   const validateValue = (value, unfilledValue = "") => {
     return +value >= 1 && +value <= sudokuSize ? +value : unfilledValue;
+  };
+
+  const calculateId = (x, y) => {
+    return y * sudokuSize + x;
   };
 
   const cloneCellValues = () => {
@@ -46,13 +52,22 @@ export default function SudokuSolver() {
       syntax, therefore I made a double times mapped array.
       Te last try would be the
         ** let newBoard = JSON.parse(JSON.stringify(cellValues)) */
-    let newBoard = cloneCellValues;
+    let newBoard = cloneCellValues();
     newBoard[y][x] = validateValue(+e.target.value, "");
     setCellValues(newBoard);
   };
 
   const handleSolve = () => {
     let solveFailed;
+
+    cellValues.forEach((row, y) =>
+      row.forEach((cell, x) => {
+        if (validateValue(cell, 0) !== 0) {
+          console.log(cell, x, y);
+          setGivenCells([...givenCells.map((c) => c), `${calculateId(x, y)}`]);
+        }
+      })
+    );
 
     setMessage({
       text: "...solving...",
@@ -118,7 +133,6 @@ export default function SudokuSolver() {
       text: "Let's solve sudoku!",
       type: light,
     });
-    //console.log(cellValues);
   }, [cellValues]);
 
   return (
@@ -126,12 +140,12 @@ export default function SudokuSolver() {
       <h1 className="text-center">SudoQ Solver</h1>
       <div id="board" style={boardStyle}>
         {board.map((row, y) => (
-          <div key={uuidv4()} className={`row rowNr-${y}`}>
+          <div key={uuidv4()} className={`row rowNr-${y}`} style={rowStyle(y)}>
             {row.map((cell, x) => (
               <input
                 key={uuidv4()}
-                id={y * sudokuSize + x}
-                style={cellStyle}
+                id={calculateId(x, y)}
+                style={cellStyle(x, givenCells.includes(calculateId(x, y)))}
                 type="number"
                 defaultValue={validateValue(cellValues[y][x], "")}
                 max={sudokuSize}
@@ -159,25 +173,9 @@ export default function SudokuSolver() {
   );
 }
 /* Styled Components */
-const cellStyle = {
-  padding: "0px",
-  margin: "0px",
-  width: "3rem",
-  height: "3rem",
-  textAlign: "center",
-  fontSize: "20px",
-  fontWeight: "bold",
-  justifyContent: "center",
-  borderRadius: "0.5rem",
-  alignItems: "center",
-  transition: "all 0.5s linear,  text-align: center",
-  boxShadow: "1px 2px 5px gray, inset 1px 2px 5px gray",
-  outline: "none",
-  border: "1px gray solid",
-};
 
 const boardStyle = {
-  width: "calc((3rem + 2 * 1px) * 9 + 24px)",
+  width: "calc((3rem + 2 * 1px) * 9 + 48px)",
   aspectRatio: "1",
   padding: "2rem",
   margin: "2.5rem auto",
@@ -185,4 +183,36 @@ const boardStyle = {
   backgroundImage:
     "linear-gradient(60deg,rgba(50, 50, 50, 0.2),rgba(150, 150, 150, 0.2))",
   boxShadow: "1px 3px 8px gray, inset 1px 3px 6px lightgray",
+};
+
+const rowStyle = (rowNr) => {
+  if ((rowNr + 1) % 3 === 0 && rowNr !== sudokuSize) {
+    return { marginBottom: boxGap };
+  }
+};
+
+const cellStyle = (colNr, given) => {
+  let styles = {
+    padding: "0px",
+    margin: "0px",
+    width: "3rem",
+    height: "3rem",
+    textAlign: "center",
+    fontSize: "20px",
+    fontWeight: "bold",
+    justifyContent: "center",
+    borderRadius: "0.5rem",
+    alignItems: "center",
+    transition: "all 0.5s linear,  text-align: center",
+    boxShadow: "1px 2px 5px gray, inset 1px 2px 5px gray",
+    outline: "none",
+    border: "1px gray solid",
+  };
+  if ((colNr + 1) % 3 === 0 && colNr !== sudokuSize) {
+    styles.marginRight = boxGap;
+  }
+  if (given) {
+    styles.backgroundColor = "gray";
+  }
+  return styles;
 };
