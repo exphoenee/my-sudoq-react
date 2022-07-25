@@ -1,30 +1,110 @@
 /* Libraries */
 import React from "react";
 import { v4 as uuidv4 } from "uuid";
-import Button from "react-bootstrap/Button";
-
-/* Other imports */
-import { Solver } from "../../Solver/Solver";
 import Container from "react-bootstrap/Container";
 import { useState, useEffect } from "react";
+import axios from "axios";
+import Alert from "react-bootstrap/Alert";
+/* Components */
+import ControlPanel from "./ControlPanel";
+import env from "react-dotenv";
 
 /* stylesheet */
 import "./solver.css";
 
-/* Components */
+/* Sudoku solver */
+import { Solver } from "../../Solver/Solver";
+
+/* Other imports */
+import { success, danger, light, info } from "../../Utils/MessageTypes";
+
 const solver = new Solver({ sectionSize: 3, renderMyself: false });
 
 export default function SudokuSolver() {
-  const board = Array(9).fill(Array(9).fill(0));
+  const boxSize = 3;
+  const sudokuSize = boxSize ** 2;
+  const board = Array(sudokuSize).fill(Array(sudokuSize).fill(0));
   const [cellValues, setCellValues] = useState(board);
+  const [apiSolver, setApiSolver] = useState(false);
+  const [message, setMessage] = useState({
+    text: "Let's solve sudoku!",
+    type: light,
+  });
+
+  const validateValue = (value, unfilledValue = "") => {
+    return +value >= 1 && +value <= sudokuSize ? +value : unfilledValue;
+  };
+
+  const handleCellChange = (e, x, y) => {
+    e.preventDefault();
+    /*it's strange I couldn't make a clon with
+        ** let newBoard = [...cellValues]
+      syntax, therefore I made a double times mapped array.
+      Te last try would be the
+        ** let newBoard = JSON.parse(JSON.stringify(cellValues)) */
+    let newBoard = cellValues.map((row) => row.map((elem) => elem));
+    newBoard[y][x] = validateValue(+e.target.value, "");
+    setCellValues(newBoard);
+  };
 
   const handleSolve = () => {
-    const solution = solver.solvePuzzle(cellValues);
-    setCellValues(solution);
+    const puzzle = cellValues
+      .map((row) => row.join(""))
+      .join("")
+      .replace(/0/g, ".");
+
+    console.log(puzzle);
+
+    setMessage({
+      text: "...solving...",
+      type: info,
+    });
+
+    let sovlable;
+    if (apiSolver) {
+      const options = {
+        method: "POST",
+        url: "https://solve-sudoku.p.rapidapi.com/",
+        headers: {
+          "content-type": "application/json",
+          "X-RapidAPI-Key": env.SUDOKUAPI,
+          "X-RapidAPI-Host": "solve-sudoku.p.rapidapi.com",
+        },
+        data: { puzzle },
+      };
+
+      axios
+        .request(options)
+        .then(function (res) {
+          sovlable = res.data.sovlable;
+
+          const solution = res.data.solution;
+          setCellValues(solution);
+        })
+        .catch(function (error) {
+          console.error(error);
+        });
+    } else {
+      const solution = solver.solvePuzzle(cellValues);
+      setCellValues(solution);
+    }
+
+    if (sovlable) {
+      setMessage({ text: "Puzzle solved!", type: success });
+    } else {
+      setMessage({
+        text: "There is no solution for this puzzle!",
+        type: danger,
+      });
+    }
   };
 
   useEffect(() => {
-    console.log("hopika");
+    setMessage({
+      text: "Let's solve sudoku!",
+      type: light,
+    });
+    console.log(cellValues);
   }, [cellValues]);
 
   return (
@@ -32,51 +112,35 @@ export default function SudokuSolver() {
       <h1 className="text-center">SudoQ Solver</h1>
       <div id="board" style={boardStyle}>
         {board.map((row, y) => (
-          <div key={uuidv4()} className={`row rowNr-${row}`}>
+          <div key={uuidv4()} className={`row rowNr-${y}`}>
             {row.map((cell, x) => (
               <input
                 key={uuidv4()}
+                id={y * sudokuSize + x}
                 style={cellStyle}
                 type="number"
-                value={cellValues[y][x] > 0 ? cellValues[y][x] : ""}
-                max="9"
+                defaultValue={validateValue(cellValues[y][x], "")}
+                max={sudokuSize}
                 min="1"
                 step="1"
-                className="tile"
-                onChange={(e) => {
-                  const newBoard = [...cellValues];
-                  console.log(newBoard);
-                  newBoard[y][x] = e.target.value;
-                  setCellValues(newBoard);
-                }}
+                className={`tile col-${x}`}
+                onChange={(e) => handleCellChange(e, x, y)}
               ></input>
             ))}
           </div>
         ))}
       </div>
-      <div
-        id="control-panel"
-        className="d-flex justify-content-center align-items-center flex-row mb-5"
-      >
-        {Object.keys(solver.examples).map((text) => (
-          <Button
-            key={uuidv4()}
-            variant="dark"
-            className="m-1"
-            onClick={() => setCellValues(solver.examples[text])}
-          >
-            {text}
-          </Button>
-        ))}
-        <Button
-          key={uuidv4()}
-          variant="dark"
-          className="m-1"
-          onClick={() => handleSolve()}
-        >
-          Solve!
-        </Button>
+      <div className="w-50 mx-auto">
+        <Alert className="text-center" variant={message.type}>
+          {message.text}
+        </Alert>
       </div>
+      <ControlPanel
+        solver={solver}
+        setCellValues={setCellValues}
+        handleSolve={handleSolve}
+        setApiSolver={setApiSolver}
+      />
     </Container>
   );
 }
