@@ -25,7 +25,13 @@ const boxGap = "0.5rem";
 
 export default function SudokuSolver() {
   const board = Array(sudokuSize).fill(Array(sudokuSize).fill(0));
-  const [cellValues, setCellValues] = useState(board);
+  const [cellValues, setCellValues] = useState(() => {
+    let oldBoard = JSON.parse(localStorage.getItem("items"));
+    if (oldBoard) {
+      return oldBoard;
+    }
+    return board;
+  });
   const [givenCells, setGivenCells] = useState([]);
   const [apiSolver, setApiSolver] = useState(false);
   const [message, setMessage] = useState({
@@ -129,6 +135,7 @@ export default function SudokuSolver() {
   };
 
   useEffect(() => {
+    localStorage.setItem("items", JSON.stringify(cellValues));
     setMessage({
       text: "Let's solve sudoku!",
       type: light,
