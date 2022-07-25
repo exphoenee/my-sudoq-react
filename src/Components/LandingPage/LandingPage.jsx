@@ -83,7 +83,7 @@ export default function LandingPage() {
               <option
                 key={uuidv4()}
                 selected={p === postsOnPage ? true : false}
-                value={p}
+                defaultValue={p}
               >
                 {p} post{p > 1 ? "s" : ""} / page
               </option>
