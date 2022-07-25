@@ -55,7 +55,7 @@ export default function LandingPage() {
 
   return (
     <Container className="mt-5 container-md w-75">
-      <h1 className="">Landing Page</h1>
+      <h1 className="text-center">Landing Page</h1>
       <div className="d-flex flex-column justify-content-center align-content-center mt-5">
         <div id="control-board" className="btn-group w-25 mx-auto" role="group">
           <button

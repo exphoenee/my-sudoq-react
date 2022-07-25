@@ -12,3 +12,6 @@ https://thewebdev.info/2022/03/26/how-to-get-an-image-from-the-web-and-encode-it
 https://stackoverflow.com/questions/61531025/how-do-i-display-a-random-image-retrieved-from-an-array-in-react-native
 https://rapidapi.com/sosier/api/solve-sudoku/
 https://www.javascripttutorial.net/string/javascript-string-replace-all/
+
+Deployed to:
+https://sdq.netlify.app/

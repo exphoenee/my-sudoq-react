@@ -1,4 +1,5 @@
 /* Libraries */
+import React from "react";
 import { Routes, Route } from "react-router-dom";
 import { v4 as uuidv4 } from "uuid";
 
@@ -12,26 +13,25 @@ import LandingPage from "./Components/LandingPage/LandingPage";
 import EMailList from "./Components/EMailList/EMailList";
 import SudokuSolver from "./Components/SudokuSolver/SudokuSolver";
 
-/* Props */
-const menuPoints = [
-  {
-    text: "Home",
-    route: "/",
-    element: <LandingPage />,
-  },
-  {
-    text: "Subscribe",
-    route: "/emaillist",
-    element: <EMailList />,
-  },
-  {
-    text: "Sudoku Solver",
-    route: "/sudokusolver",
-    element: <SudokuSolver />,
-  },
-];
-
 export default function App() {
+  /* Props */
+  const menuPoints = [
+    {
+      text: "Home",
+      route: "/",
+      element: <LandingPage />,
+    },
+    {
+      text: "Subscribe",
+      route: "/emaillist",
+      element: <EMailList />,
+    },
+    {
+      text: "Sudoku Solver",
+      route: "/sudokusolver",
+      element: <SudokuSolver />,
+    },
+  ];
   return (
     <>
       <Header menuPoints={menuPoints} />

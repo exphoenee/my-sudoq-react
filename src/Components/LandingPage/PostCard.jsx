@@ -1,14 +1,15 @@
+import React from "react";
 import Card from "react-bootstrap/Card";
 import ListGroup from "react-bootstrap/ListGroup";
 
 /*images*/
-import img1 from "../../media/img1.jpeg";
-import img2 from "../../media/img2.webp";
-import img3 from "../../media/img3.jpeg";
-import img4 from "../../media/img4.webp";
-import img5 from "../../media/img5.webp";
-import img6 from "../../media/img6.webp";
-import img7 from "../../media/img7.jpg";
+import img1 from "../../Media/img1.jpeg";
+import img2 from "../../Media/img2.webp";
+import img3 from "../../Media/img3.jpeg";
+import img4 from "../../Media/img4.webp";
+import img5 from "../../Media/img5.webp";
+import img6 from "../../Media/img6.webp";
+import img7 from "../../Media/img7.jpg";
 
 export default function PostCard({ title, description }) {
   const images = [img1, img2, img3, img4, img5, img6, img7];
