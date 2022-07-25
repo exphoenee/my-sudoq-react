@@ -10,9 +10,16 @@ import img5 from "../../media/img5.webp";
 import img6 from "../../media/img6.webp";
 import img7 from "../../media/img7.jpg";
 
-const images = [img1, img2, img3, img4, img5, img6, img7];
-
 export default function PostCard({ title, description }) {
+  const images = [img1, img2, img3, img4, img5, img6, img7];
+  const texts = [
+    "Cras justo odio",
+    "Dapibus ac facilisis in",
+    "Vestibulum at eros",
+    "suscipit recusandae consequuntur",
+    "tempore vitae sequi sint nihil",
+    "doloremque ipsam iure",
+  ];
   return (
     <Card style={cardStyle}>
       <Card.Img
@@ -25,9 +32,15 @@ export default function PostCard({ title, description }) {
         <Card.Text>{description}</Card.Text>
       </Card.Body>
       <ListGroup className="list-group-flush">
-        <ListGroup.Item>Cras justo odio</ListGroup.Item>
-        <ListGroup.Item>Dapibus ac facilisis in</ListGroup.Item>
-        <ListGroup.Item>Vestibulum at eros</ListGroup.Item>
+        <ListGroup.Item>
+          {texts[Math.floor(Math.random() * texts.length)]}
+        </ListGroup.Item>
+        <ListGroup.Item>
+          {texts[Math.floor(Math.random() * texts.length)]}
+        </ListGroup.Item>
+        <ListGroup.Item>
+          {texts[Math.floor(Math.random() * texts.length)]}
+        </ListGroup.Item>
       </ListGroup>
       <Card.Body>
         <Card.Link href="#">Card Link</Card.Link>
@@ -37,4 +50,4 @@ export default function PostCard({ title, description }) {
   );
 }
 /* Styles and Styled Components */
-const cardStyle = { width: "38rem", margin: "2rem auto" };
+const cardStyle = { width: "30rem", margin: "2rem" };
