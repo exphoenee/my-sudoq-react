@@ -94,7 +94,8 @@ export default function SudokuSolver() {
           console.error(error);
         });
     } else {
-      const solution = solver.solvePuzzle(cloneCellValues());
+      const puzzle = cloneCellValues();
+      const solution = solver.solvePuzzle(puzzle);
       setCellValues(solution);
     }
 
