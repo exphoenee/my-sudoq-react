@@ -244,7 +244,7 @@ export class Solver {
       arg:     puzzle n x n sized 2D array
       returns: a boolean only ture is puzzle solved */
   puzzleIsSolved(puzzle) {
-    return !puzzle.some((row) => row.some((cell) => cell === 0));
+    return !puzzle.some((row) => row.some((cell) => cell == 0));
   }
 
   /***********************************/
@@ -258,10 +258,6 @@ export class Solver {
     arg:    puzzle n x n sized 2D array
     return: a boolean true means the puzzle seems to solvable */
   isPuzzleCorrect(puzzle) {
-    //console.log(puzzle);
-    //console.log(this.#rowsCorrect(puzzle));
-    //console.log(this.#columnsCorrect(puzzle));
-    //console.log(this.#boxesCorrect(puzzle));
     return (
       this.#rowsCorrect(puzzle) &&
       this.#columnsCorrect(puzzle) &&
@@ -286,9 +282,8 @@ export class Solver {
       * a flattened box)
     return: a boolean true means the row doesn't has duplicates */
   #batchCorrect(batch) {
-    console.log(batch);
-    const onlyNums = batch.filter((num) => this.#validateValue(num) !== 0);
-    return new Set(onlyNums).size === onlyNums.length;
+    const onlyNums = batch.filter((num) => this.#validateValue(num) != 0);
+    return new Set(onlyNums).size == onlyNums.length;
   }
 
   /* this method checks all the columns has unique numbers
