@@ -6,6 +6,9 @@ import Container from "react-bootstrap/Container";
 import { v4 as uuidv4 } from "uuid";
 import Form from "react-bootstrap/Form";
 
+/* Animation */
+import AnimatedPage from "../AnimatedPage/AnimatedPage";
+
 /* Other imports */
 
 /* Components */
@@ -54,67 +57,70 @@ export default function LandingPage() {
   }, [postsOnPage]);
 
   return (
-    <Container className="mt-5 container-md w-75">
-      <h1 className="text-center">Landing Page</h1>
-      <div className="d-flex flex-column justify-content-center align-content-center mt-5">
-        <div id="control-board" className="btn-group w-25 mx-auto" role="group">
-          <button
-            type="button"
-            className="btn btn-secondary"
-            onClick={() => setPage(validatePageValue(page - 1))}
+    <AnimatedPage>
+      <Container className="mt-5 container-md w-75">
+        <h1 className="text-center">Landing Page</h1>
+        <div className="d-flex flex-column justify-content-center align-content-center mt-5">
+          <div
+            id="control-board"
+            className="btn-group w-25 mx-auto"
+            role="group"
           >
-            Previous
-          </button>
-          <button
-            type="button"
-            className="btn btn-secondary"
-            onClick={() => setPage(validatePageValue(page + 1))}
-          >
-            Next
-          </button>
+            <button
+              type="button"
+              className="btn btn-secondary"
+              onClick={() => setPage(validatePageValue(page - 1))}
+            >
+              Previous
+            </button>
+            <button
+              type="button"
+              className="btn btn-secondary"
+              onClick={() => setPage(validatePageValue(page + 1))}
+            >
+              Next
+            </button>
+          </div>
+          <p className="text-center mb-0">
+            Page {page} form {pageNr}
+          </p>
+          <p className="text-center">
+            there are {mockPosts.length} posts to read
+          </p>
+          <Form.Group className="mb-3" controlId="ControlInput1">
+            <Form.Select
+              className="w-25 mx-auto text-center"
+              size="sm"
+              onChange={(e) => {
+                const newPPP = +e.target.value;
+                setPage(Math.ceil((postsOnPage * page) / newPPP));
+                setPostsOnPage(newPPP);
+              }}
+            >
+              {paginationRule.map((p) => (
+                <option
+                  key={uuidv4()}
+                  selected={p === postsOnPage ? true : false}
+                  value={p}
+                >
+                  {p} post{p > 1 ? "s" : ""} / page
+                </option>
+              ))}
+            </Form.Select>
+          </Form.Group>
         </div>
-        <p className="text-center mb-0">
-          Page {page} form {pageNr}
-        </p>
-        <p className="text-center">
-          there are {mockPosts.length} posts to read
-        </p>
-        <Form.Group className="mb-3" controlId="ControlInput1">
-          <Form.Select
-            className="w-25 mx-auto text-center"
-            size="sm"
-            onChange={(e) => {
-              const newPPP = +e.target.value;
-              setPage(Math.ceil((postsOnPage * page) / newPPP));
-              setPostsOnPage(newPPP);
-            }}
-          >
-            {paginationRule.map((p) => (
-              <option
+        <div className="d-flex flex-row  flex-wrap justify-content-center">
+          {[...mockPosts]
+            .splice((page - 1) * postsOnPage, postsOnPage)
+            .map((post) => (
+              <PostCard
+                title={post.title}
+                description={post.body}
                 key={uuidv4()}
-                selected={p === postsOnPage ? true : false}
-                value={p}
-              >
-                {p} post{p > 1 ? "s" : ""} / page
-              </option>
+              />
             ))}
-          </Form.Select>
-        </Form.Group>
-      </div>
-      <div className="d-flex flex-row  flex-wrap justify-content-center">
-        {[...mockPosts]
-          .splice((page - 1) * postsOnPage, postsOnPage)
-          .map((post) => (
-            <PostCard
-              title={post.title}
-              description={post.body}
-              key={uuidv4()}
-            />
-          ))}
-      </div>
-    </Container>
+        </div>
+      </Container>
+    </AnimatedPage>
   );
 }
-//<Row key={uuidv4()}>
-//</Row>
-/* Styled Components */
