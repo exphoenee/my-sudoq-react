@@ -1,7 +1,10 @@
 /* Libraries */
 import React from "react";
-import { Routes, Route } from "react-router-dom";
+import { Routes, Route, useLocation } from "react-router-dom";
 import { v4 as uuidv4 } from "uuid";
+
+/* Animation */
+import { AnimatePresence } from "framer-motion";
 
 /* Other imports */
 import "./App.css";
@@ -14,6 +17,7 @@ import EMailList from "./Components/EMailList/EMailList";
 import SudokuSolver from "./Components/SudokuSolver/SudokuSolver";
 
 export default function App() {
+  const location = useLocation();
   /* Props */
   const menuPoints = [
     {
@@ -36,24 +40,26 @@ export default function App() {
     <>
       <Header menuPoints={menuPoints} />
       <main>
-        <Routes>
-          {menuPoints.map((elem) => (
+        <AnimatePresence exitBeforeEnter>
+          <Routes key={location.pathname} location={location}>
+            {menuPoints.map((elem) => (
+              <Route
+                key={uuidv4()}
+                path={`${elem.route}`}
+                exact
+                element={elem.element}
+              />
+            ))}
             <Route
-              key={uuidv4()}
-              path={`${elem.route}`}
-              exact
-              element={elem.element}
+              path="*"
+              element={
+                <main style={{ padding: "1rem" }}>
+                  <p>There's nothing here!</p>
+                </main>
+              }
             />
-          ))}
-          <Route
-            path="*"
-            element={
-              <main style={{ padding: "1rem" }}>
-                <p>There's nothing here!</p>
-              </main>
-            }
-          />
-        </Routes>
+          </Routes>
+        </AnimatePresence>
       </main>
       <footer></footer>
       <Footer />
