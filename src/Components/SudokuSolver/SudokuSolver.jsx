@@ -5,9 +5,13 @@ import Container from "react-bootstrap/Container";
 import { useState, useEffect } from "react";
 import axios from "axios";
 import Alert from "react-bootstrap/Alert";
+
 /* Components */
 import ControlPanel from "./ControlPanel";
 import env from "react-dotenv";
+
+/* Animation */
+import AnimatedPage from "../AnimatedPage/AnimatedPage";
 
 /* stylesheet */
 import "./solver.css";
@@ -142,7 +146,7 @@ export default function SudokuSolver() {
     });
   }, [cellValues]);
 
-  return (
+  return ( <AnimatedPage>
     <Container className="mt-5 container-md w-75">
       <h1 className="text-center">SudoQ Solver</h1>
       <div id="board" style={boardStyle}>
@@ -176,7 +180,7 @@ export default function SudokuSolver() {
         handleSolve={handleSolve}
         setApiSolver={setApiSolver}
       />
-    </Container>
+    </Container> </AnimatedPage>
   );
 }
 /* Styled Components */
