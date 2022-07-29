@@ -12,6 +12,9 @@ import axios from "axios";
 /* Other imports */
 import { success, danger, warning } from "../../Utils/MessageTypes";
 
+/* Animation */
+import AnimatedPage from "../AnimatedPage/AnimatedPage";
+
 /* Components */
 
 export default function EMailList() {
@@ -82,7 +85,7 @@ export default function EMailList() {
     }
   };
 
-  return (
+  return ( <AnimatedPage>
     <Container style={containerStyle} className="container-sm w-50">
       <h1>Subscribe for our email list</h1>
       <Form onSubmit={handleSubmit}>
@@ -131,7 +134,7 @@ export default function EMailList() {
           Send
         </Button>
       </Form>{" "}
-    </Container>
+    </Container> </AnimatedPage>
   );
 }
 
