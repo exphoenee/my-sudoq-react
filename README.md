@@ -56,4 +56,4 @@ npm start
 - https://www.framer.com/docs/transition/
 - https://github.com/exphoenee/SudokuSolver-API
 
-Deployed to: https://sdq.netlify.app/
+Deployed to: https://xudoq.netlify.app/
