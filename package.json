@@ -42,7 +42,7 @@
   },
   "react-dotenv": {
     "whitelist": [
-      "SUDOKUAPI"
+      "SUDOKU_API_URL"
     ]
   },
   "devDependencies": {
