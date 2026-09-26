@@ -1,7 +1,6 @@
 /* Libraries */
 import React from "react";
 import { v4 as uuidv4 } from "uuid";
-import Container from "react-bootstrap/Container";
 import Alert from "react-bootstrap/Alert";
 
 /* Components */
@@ -17,7 +16,7 @@ import "./solver.css";
 import useSudokuSolver from "../../hooks/useSudokuSolver";
 import { BOARD_SIZE } from "../../Utils/boardTransform";
 
-const boxGap = "0.5rem";
+const isBoxEnd = (index) => (index + 1) % 3 === 0 && index !== BOARD_SIZE - 1;
 
 export default function SudokuSolver() {
   const {
@@ -41,92 +40,51 @@ export default function SudokuSolver() {
 
   return (
     <AnimatedPage>
-      <Container className="mt-5 container-md w-75">
-        <h1 className="text-center">SudoQ Solver</h1>
-        <div id="board" style={boardStyle}>
+      <div className="sudoku-page">
+        <h1 className="sudoku-title text-center">SudoQ Solver</h1>
+        <p className="sudoku-subtitle text-center">
+          Generate a puzzle by difficulty or fill in your own, then let the
+          Sudoku Solver API do the rest.
+        </p>
+        <div id="board">
           {board.map((row, y) => (
             <div
               key={uuidv4()}
-              className={`row rowNr-${y}`}
-              style={rowStyle(y)}
+              className={`board-row${isBoxEnd(y) ? " box-end" : ""}`}
             >
-              {row.map((cell, x) => (
-                <input
-                  key={uuidv4()}
-                  id={`${calculateId(x, y)}`}
-                  style={cellStyle(
-                    x,
-                    givenCells.includes(`${calculateId(x, y)}`)
-                  )}
-                  type="number"
-                  defaultValue={cell || ""}
-                  max={BOARD_SIZE}
-                  min="1"
-                  step="1"
-                  className={`tile col-${x}`}
-                  disabled={loading}
-                  onChange={(e) => handleCellChange(e, x, y)}
-                ></input>
-              ))}
+              {row.map((cell, x) => {
+                const given = givenCells.includes(`${calculateId(x, y)}`);
+                return (
+                  <input
+                    key={uuidv4()}
+                    id={`${calculateId(x, y)}`}
+                    className={`tile${isBoxEnd(x) ? " box-end" : ""}${
+                      given ? " given" : ""
+                    }`}
+                    type="number"
+                    inputMode="numeric"
+                    defaultValue={cell || ""}
+                    max={BOARD_SIZE}
+                    min="1"
+                    step="1"
+                    disabled={loading}
+                    onChange={(e) => handleCellChange(e, x, y)}
+                  ></input>
+                );
+              })}
             </div>
           ))}
         </div>
-        <div className="w-50 mx-auto">
-          <Alert className="text-center" variant={message.type}>
-            {message.text}
-          </Alert>
-        </div>
+        <Alert className="sudoku-message" variant={message.type}>
+          {message.text}
+        </Alert>
         <ControlPanel
           loading={loading}
           onGenerate={generate}
           onSolve={solve}
           onReset={reset}
         />
-      </Container>
+      </div>
     </AnimatedPage>
   );
 }
-/* Styled Components */
-
-const boardStyle = {
-  width: "calc((3rem + 2 * 1px) * 9 + 48px)",
-  aspectRatio: "1",
-  padding: "2rem",
-  margin: "2.5rem auto",
-  borderRadius: "2rem",
-  backgroundImage:
-    "linear-gradient(60deg,rgba(50, 50, 50, 0.2),rgba(150, 150, 150, 0.2))",
-  boxShadow: "1px 3px 8px gray, inset 1px 3px 6px lightgray",
-};
-
-const rowStyle = (rowNr) => {
-  if ((rowNr + 1) % 3 === 0 && rowNr !== BOARD_SIZE) {
-    return { marginBottom: boxGap };
-  }
-};
-
-const cellStyle = (colNr, given) => {
-  let styles = {
-    padding: "0px",
-    margin: "0px",
-    width: "3rem",
-    height: "3rem",
-    textAlign: "center",
-    fontSize: "20px",
-    fontWeight: "bold",
-    justifyContent: "center",
-    borderRadius: "0.5rem",
-    alignItems: "center",
-    transition: "all 0.5s linear,  text-align: center",
-    boxShadow: "1px 2px 5px gray, inset 1px 2px 5px gray",
-    outline: "none",
-    border: "1px gray solid",
-  };
-  if ((colNr + 1) % 3 === 0 && colNr !== BOARD_SIZE) {
-    styles.marginRight = boxGap;
-  }
-  if (given) {
-    styles.backgroundColor = "gray";
-  }
-  return styles;
-};
