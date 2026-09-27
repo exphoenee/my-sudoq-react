@@ -29,6 +29,32 @@ describe("useSudokuSolver", () => {
     expect(result.current.givenCells).toContain("0");
   });
 
+  it("falls back to an empty board when the stored value has the wrong shape", () => {
+    localStorage.setItem("items", JSON.stringify([[1, 2, 3]]));
+
+    const { result } = renderHook(() => useSudokuSolver());
+    expect(result.current.board).toEqual(emptyBoard());
+    expect(result.current.givenCells).toEqual([]);
+  });
+
+  it("does not crash when localStorage.setItem throws", () => {
+    const setItemSpy = vi
+      .spyOn(Storage.prototype, "setItem")
+      .mockImplementation(() => {
+        throw new Error("QuotaExceededError");
+      });
+
+    const { result } = renderHook(() => useSudokuSolver());
+    expect(() =>
+      act(() => {
+        result.current.updateCell(0, 0, 5);
+      })
+    ).not.toThrow();
+    expect(result.current.board[0][0]).toBe(5);
+
+    setItemSpy.mockRestore();
+  });
+
   it("updateCell mutates a single cell and persists it", () => {
     const { result } = renderHook(() => useSudokuSolver());
     act(() => {

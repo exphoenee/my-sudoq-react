@@ -4,6 +4,7 @@ import {
   BOARD_SIZE,
   boardToPuzzleString,
   emptyBoard,
+  isValidBoard,
   puzzleStringToBoard,
   type Board,
 } from "../Utils/boardTransform";
@@ -25,7 +26,7 @@ export interface Message {
 const readStoredBoard = (): Board => {
   try {
     const stored = JSON.parse(localStorage.getItem(STORAGE_KEY) ?? "null");
-    return Array.isArray(stored) ? stored : emptyBoard();
+    return isValidBoard(stored) ? stored : emptyBoard();
   } catch {
     return emptyBoard();
   }
@@ -46,7 +47,7 @@ const calculateGivenCells = (board: Board): string[] => {
 export default function useSudokuSolver() {
   const [board, setBoard] = useState<Board>(readStoredBoard);
   const [givenCells, setGivenCells] = useState<string[]>(() =>
-    calculateGivenCells(readStoredBoard())
+    calculateGivenCells(board)
   );
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState<Message>({
@@ -55,7 +56,12 @@ export default function useSudokuSolver() {
   });
 
   useEffect(() => {
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(board));
+    try {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(board));
+    } catch {
+      /* Persistence is a nice-to-have (private browsing, full quota, or a
+         disabled localStorage shouldn't break the board itself). */
+    }
   }, [board]);
 
   const updateCell = useCallback((x: number, y: number, value: number) => {
