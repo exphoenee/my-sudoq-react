@@ -36,8 +36,7 @@ export default function SudokuSolver() {
     x: number,
     y: number
   ) => {
-    e.preventDefault();
-    const value = +e.target.value;
+    const value = Math.trunc(+e.target.value);
     updateCell(x, y, value >= 1 && value <= BOARD_SIZE ? value : 0);
   };
 
