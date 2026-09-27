@@ -6,7 +6,7 @@ import Alert from "react-bootstrap/Alert";
 import ControlPanel from "./ControlPanel";
 
 /* Animation */
-import AnimatedPage from "../AnimatedPage/AnimatedPage";
+import FadeIn from "../FadeIn/FadeIn";
 
 /* stylesheet */
 import "./solver.css";
@@ -38,18 +38,19 @@ export default function SudokuSolver() {
   };
 
   return (
-    <AnimatedPage>
+    <FadeIn>
       <div className="sudoku-page">
         <h1 className="sudoku-title text-center">XudoQ Solver</h1>
         <p className="sudoku-subtitle text-center">
           Generate a puzzle by difficulty or fill in your own, then let the
           Sudoku Solver API do the rest.
         </p>
-        <div id="board">
+        <div id="board" role="grid" aria-label="Sudoku board">
           {board.map((row, y) => (
             <div
               key={`row-${y}`}
               className={`board-row${isBoxEnd(y) ? " box-end" : ""}`}
+              role="row"
             >
               {row.map((cell, x) => {
                 const given = givenCells.includes(`${calculateId(x, y)}`);
@@ -67,6 +68,9 @@ export default function SudokuSolver() {
                     min="1"
                     step="1"
                     disabled={loading}
+                    aria-label={`Row ${y + 1}, column ${x + 1}${
+                      given ? ", given" : ""
+                    }`}
                     onChange={(e) => handleCellChange(e, x, y)}
                   ></input>
                 );
@@ -84,6 +88,6 @@ export default function SudokuSolver() {
           onReset={reset}
         />
       </div>
-    </AnimatedPage>
+    </FadeIn>
   );
 }

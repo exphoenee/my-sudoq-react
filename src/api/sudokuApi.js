@@ -12,7 +12,15 @@ function unwrap(response) {
 }
 
 function apiErrorMessage(err, fallback) {
-  return err?.response?.data?.error?.message || err?.message || fallback;
+  const apiMessage = err?.response?.data?.error?.message;
+  if (apiMessage) return apiMessage;
+  /* A real axios request that never got a response (network failure,
+     timeout, CORS block) - as opposed to a locally thrown Error, e.g.
+     unwrap()'s success:false case, which already carries a good message. */
+  if (err?.isAxiosError && !err?.response) {
+    return "Could not reach the Sudoku Solver API. Check your connection and try again.";
+  }
+  return err?.message || fallback;
 }
 
 /* puzzle: comma separated string of 81 values, 0 = empty

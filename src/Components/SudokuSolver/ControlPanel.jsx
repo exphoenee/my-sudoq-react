@@ -1,5 +1,6 @@
 /* Libraries */
 import React from "react";
+import PropTypes from "prop-types";
 import Button from "react-bootstrap/Button";
 
 /* stylesheet */
@@ -43,3 +44,10 @@ export default function ControlPanel({ loading, onGenerate, onSolve, onReset }) 
     </div>
   );
 }
+
+ControlPanel.propTypes = {
+  loading: PropTypes.bool.isRequired,
+  onGenerate: PropTypes.func.isRequired,
+  onSolve: PropTypes.func.isRequired,
+  onReset: PropTypes.func.isRequired,
+};

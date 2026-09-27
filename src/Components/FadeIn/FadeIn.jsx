@@ -1,12 +1,13 @@
 /* Libraries */
 import React from "react";
+import PropTypes from "prop-types";
 import { motion } from "framer-motion";
 
 /* Other imports */
 
 /* Components */
 
-export default function AnimatedPage({ children }) {
+export default function FadeIn({ children }) {
   const animation = {
     initial: { opacity: 0, x: -50 },
     animate: { opacity: 1, x: 0 },
@@ -25,4 +26,6 @@ export default function AnimatedPage({ children }) {
   );
 }
 
-/* Styled Components */
+FadeIn.propTypes = {
+  children: PropTypes.node.isRequired,
+};

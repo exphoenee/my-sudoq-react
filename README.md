@@ -13,7 +13,7 @@ holds no sudoku logic of its own, only UI state and an API client.
 ```
 src/
 ├── api/
-│   ├── httpClient.js      # axios instance, base URL from SUDOKU_API_URL
+│   ├── httpClient.js      # axios instance, base URL from REACT_APP_SUDOKU_API_URL
 │   └── sudokuApi.js       # solve()/generate() calls against the API
 ├── hooks/
 │   └── useSudokuSolver.js # board state, persistence, loading/message state
@@ -22,22 +22,21 @@ src/
 │   └── MessageTypes.jsx   # alert variant constants
 ├── Components/
 │   ├── SudokuSolver/      # board UI + control panel
-│   └── AnimatedPage/
+│   ├── FadeIn/            # page-enter fade/slide animation wrapper
+│   └── ErrorBoundary/     # catches render errors, shows a fallback message
 └── App.jsx                # renders SudokuSolver
 ```
 
 ## Configuration
 
-The app talks to the API at the URL configured via `SUDOKU_API_URL` (see
-`.env.example`). If unset, it falls back to the public demo deployment at
+The app talks to the API at the URL configured via `REACT_APP_SUDOKU_API_URL`
+(see `.env.example`, standard Create React App env var convention). If
+unset, it falls back to the public demo deployment at
 `https://sudoku-solver-api.fly.dev`.
 
 ```bash
 cp .env.example .env
 ```
-
-Environment variables are injected via `react-dotenv` (see the
-`react-dotenv.whitelist` entry in `package.json`).
 
 ## Quick start
 
@@ -45,6 +44,17 @@ Environment variables are injected via `react-dotenv` (see the
 npm install
 npm start
 ```
+
+## Tests
+
+```bash
+npm test
+```
+
+Covers the board <-> API string transforms, the API client's error-message
+handling (network failure vs. API-reported error vs. fallback), the
+`useSudokuSolver` state hook (including localStorage persistence), and a
+component smoke test for the board (typing keeps focus, Reset clears cells).
 
 ## Used sources
 
