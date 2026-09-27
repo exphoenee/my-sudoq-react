@@ -1,21 +1,27 @@
-/* Libraries */
-import React from "react";
-import PropTypes from "prop-types";
+import { Component, type ErrorInfo, type ReactNode } from "react";
+
+interface ErrorBoundaryProps {
+  children: ReactNode;
+}
+
+interface ErrorBoundaryState {
+  hasError: boolean;
+}
 
 /* Catches render-time errors below it so a bug in one component doesn't
    blank the whole page. Must be a class component - React has no hook
    equivalent for getDerivedStateFromError/componentDidCatch. */
-export default class ErrorBoundary extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = { hasError: false };
-  }
+export default class ErrorBoundary extends Component<
+  ErrorBoundaryProps,
+  ErrorBoundaryState
+> {
+  state: ErrorBoundaryState = { hasError: false };
 
-  static getDerivedStateFromError() {
+  static getDerivedStateFromError(): ErrorBoundaryState {
     return { hasError: true };
   }
 
-  componentDidCatch(error, info) {
+  componentDidCatch(error: Error, info: ErrorInfo) {
     // eslint-disable-next-line no-console
     console.error("Unhandled error in SudokuSolver:", error, info);
   }
@@ -32,7 +38,3 @@ export default class ErrorBoundary extends React.Component {
     return this.props.children;
   }
 }
-
-ErrorBoundary.propTypes = {
-  children: PropTypes.node.isRequired,
-};

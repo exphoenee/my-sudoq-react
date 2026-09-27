@@ -1,13 +1,14 @@
+import { beforeEach, describe, expect, it, vi } from "vitest";
 import { renderHook, act, waitFor } from "@testing-library/react";
 import useSudokuSolver from "./useSudokuSolver";
 import { generateSudoku, solveSudoku } from "../api/sudokuApi";
 import { emptyBoard, BOARD_SIZE } from "../Utils/boardTransform";
 
-jest.mock("../api/sudokuApi");
+vi.mock("../api/sudokuApi");
 
 beforeEach(() => {
   localStorage.clear();
-  jest.clearAllMocks();
+  vi.clearAllMocks();
 });
 
 describe("useSudokuSolver", () => {
@@ -34,7 +35,7 @@ describe("useSudokuSolver", () => {
       result.current.updateCell(2, 3, 7);
     });
     expect(result.current.board[3][2]).toBe(7);
-    expect(JSON.parse(localStorage.getItem("items"))[3][2]).toBe(7);
+    expect(JSON.parse(localStorage.getItem("items") ?? "[]")[3][2]).toBe(7);
   });
 
   it("reset clears the board, given cells and message", () => {
@@ -52,7 +53,13 @@ describe("useSudokuSolver", () => {
 
   it("generate loads a puzzle from the API and marks given cells", async () => {
     const puzzle = "1," + "0,".repeat(BOARD_SIZE * BOARD_SIZE - 2) + "9";
-    generateSudoku.mockResolvedValue({ puzzle });
+    vi.mocked(generateSudoku).mockResolvedValue({
+      puzzle,
+      solution: "",
+      level: "easy",
+      generationTime: 0,
+      trialStep: 0,
+    });
 
     const { result } = renderHook(() => useSudokuSolver());
     act(() => {
@@ -67,7 +74,7 @@ describe("useSudokuSolver", () => {
   });
 
   it("generate surfaces the API error as the message", async () => {
-    generateSudoku.mockRejectedValue(new Error("boom"));
+    vi.mocked(generateSudoku).mockRejectedValue(new Error("boom"));
 
     const { result } = renderHook(() => useSudokuSolver());
     await act(async () => {
@@ -79,7 +86,7 @@ describe("useSudokuSolver", () => {
 
   it("solve replaces the board with the solved puzzle", async () => {
     const solution = "5," + "0,".repeat(BOARD_SIZE * BOARD_SIZE - 1);
-    solveSudoku.mockResolvedValue(solution.slice(0, -1));
+    vi.mocked(solveSudoku).mockResolvedValue(solution.slice(0, -1));
 
     const { result } = renderHook(() => useSudokuSolver());
     await act(async () => {

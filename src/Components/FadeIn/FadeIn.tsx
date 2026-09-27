@@ -1,13 +1,11 @@
-/* Libraries */
-import React from "react";
-import PropTypes from "prop-types";
+import type { ReactNode } from "react";
 import { motion } from "framer-motion";
 
-/* Other imports */
+interface FadeInProps {
+  children: ReactNode;
+}
 
-/* Components */
-
-export default function FadeIn({ children }) {
+export default function FadeIn({ children }: FadeInProps) {
   const animation = {
     initial: { opacity: 0, x: -50 },
     animate: { opacity: 1, x: 0 },
@@ -25,7 +23,3 @@ export default function FadeIn({ children }) {
     </motion.div>
   );
 }
-
-FadeIn.propTypes = {
-  children: PropTypes.node.isRequired,
-};

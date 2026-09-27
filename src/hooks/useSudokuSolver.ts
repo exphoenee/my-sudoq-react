@@ -5,22 +5,34 @@ import {
   boardToPuzzleString,
   emptyBoard,
   puzzleStringToBoard,
+  type Board,
 } from "../Utils/boardTransform";
-import { success, danger, light, info } from "../Utils/MessageTypes";
+import {
+  success,
+  danger,
+  light,
+  info,
+  type MessageVariant,
+} from "../Utils/MessageTypes";
 
 const STORAGE_KEY = "items";
 
-const readStoredBoard = () => {
+export interface Message {
+  text: string;
+  type: MessageVariant;
+}
+
+const readStoredBoard = (): Board => {
   try {
-    const stored = JSON.parse(localStorage.getItem(STORAGE_KEY));
+    const stored = JSON.parse(localStorage.getItem(STORAGE_KEY) ?? "null");
     return Array.isArray(stored) ? stored : emptyBoard();
   } catch {
     return emptyBoard();
   }
 };
 
-const calculateGivenCells = (board) => {
-  const given = [];
+const calculateGivenCells = (board: Board): string[] => {
+  const given: string[] = [];
   board.forEach((row, y) =>
     row.forEach((cell, x) => {
       if (cell) given.push(`${y * BOARD_SIZE + x}`);
@@ -32,12 +44,12 @@ const calculateGivenCells = (board) => {
 /* Owns all sudoku board state for the UI. Every solve/generate call is
    delegated to the SudokuSolver-API - this hook holds no puzzle logic. */
 export default function useSudokuSolver() {
-  const [board, setBoard] = useState(readStoredBoard);
-  const [givenCells, setGivenCells] = useState(() =>
+  const [board, setBoard] = useState<Board>(readStoredBoard);
+  const [givenCells, setGivenCells] = useState<string[]>(() =>
     calculateGivenCells(readStoredBoard())
   );
   const [loading, setLoading] = useState(false);
-  const [message, setMessage] = useState({
+  const [message, setMessage] = useState<Message>({
     text: "Let's solve sudoku!",
     type: light,
   });
@@ -46,7 +58,7 @@ export default function useSudokuSolver() {
     localStorage.setItem(STORAGE_KEY, JSON.stringify(board));
   }, [board]);
 
-  const updateCell = useCallback((x, y, value) => {
+  const updateCell = useCallback((x: number, y: number, value: number) => {
     setBoard((prev) => {
       const next = prev.map((row) => [...row]);
       next[y][x] = value;
@@ -60,7 +72,7 @@ export default function useSudokuSolver() {
     setMessage({ text: "Let's solve sudoku!", type: light });
   }, []);
 
-  const generate = useCallback(async (level) => {
+  const generate = useCallback(async (level: string) => {
     setLoading(true);
     setMessage({ text: `Generating a ${level} puzzle...`, type: info });
     try {
@@ -70,7 +82,7 @@ export default function useSudokuSolver() {
       setGivenCells(calculateGivenCells(newBoard));
       setMessage({ text: "New puzzle ready!", type: success });
     } catch (err) {
-      setMessage({ text: err.message, type: danger });
+      setMessage({ text: (err as Error).message, type: danger });
     } finally {
       setLoading(false);
     }
@@ -85,7 +97,7 @@ export default function useSudokuSolver() {
       setBoard(puzzleStringToBoard(solution));
       setMessage({ text: "Puzzle solved!", type: success });
     } catch (err) {
-      setMessage({ text: err.message, type: danger });
+      setMessage({ text: (err as Error).message, type: danger });
     } finally {
       setLoading(false);
     }

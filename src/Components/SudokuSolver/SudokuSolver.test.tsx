@@ -1,7 +1,8 @@
+import { beforeEach, describe, expect, it, vi } from "vitest";
 import { render, screen, fireEvent } from "@testing-library/react";
 import SudokuSolver from "./SudokuSolver";
 
-jest.mock("../../api/sudokuApi");
+vi.mock("../../api/sudokuApi");
 
 beforeEach(() => {
   localStorage.clear();
@@ -16,7 +17,7 @@ describe("SudokuSolver", () => {
 
   it("keeps focus on the same cell after typing a digit", () => {
     render(<SudokuSolver />);
-    const cell0 = document.getElementById("0");
+    const cell0 = document.getElementById("0") as HTMLInputElement;
     cell0.focus();
     fireEvent.change(cell0, { target: { value: "5" } });
     expect(cell0.value).toBe("5");
@@ -25,7 +26,7 @@ describe("SudokuSolver", () => {
 
   it("Reset clears a typed value", () => {
     render(<SudokuSolver />);
-    const cell0 = document.getElementById("0");
+    const cell0 = document.getElementById("0") as HTMLInputElement;
     fireEvent.change(cell0, { target: { value: "5" } });
     expect(cell0.value).toBe("5");
 
