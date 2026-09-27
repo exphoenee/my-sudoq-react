@@ -1,12 +1,11 @@
-/* Libraries */
-import React from "react";
+import type { ReactNode } from "react";
 import { motion } from "framer-motion";
 
-/* Other imports */
+interface FadeInProps {
+  children: ReactNode;
+}
 
-/* Components */
-
-export default function AnimatedPage({ children }) {
+export default function FadeIn({ children }: FadeInProps) {
   const animation = {
     initial: { opacity: 0, x: -50 },
     animate: { opacity: 1, x: 0 },
@@ -24,5 +23,3 @@ export default function AnimatedPage({ children }) {
     </motion.div>
   );
 }
-
-/* Styled Components */

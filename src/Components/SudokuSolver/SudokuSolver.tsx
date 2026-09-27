@@ -1,12 +1,11 @@
-/* Libraries */
-import React from "react";
+import type { ChangeEvent } from "react";
 import Alert from "react-bootstrap/Alert";
 
 /* Components */
 import ControlPanel from "./ControlPanel";
 
 /* Animation */
-import AnimatedPage from "../AnimatedPage/AnimatedPage";
+import FadeIn from "../FadeIn/FadeIn";
 
 /* stylesheet */
 import "./solver.css";
@@ -15,7 +14,8 @@ import "./solver.css";
 import useSudokuSolver from "../../hooks/useSudokuSolver";
 import { BOARD_SIZE } from "../../Utils/boardTransform";
 
-const isBoxEnd = (index) => (index + 1) % 3 === 0 && index !== BOARD_SIZE - 1;
+const isBoxEnd = (index: number) =>
+  (index + 1) % 3 === 0 && index !== BOARD_SIZE - 1;
 
 export default function SudokuSolver() {
   const {
@@ -29,27 +29,32 @@ export default function SudokuSolver() {
     reset,
   } = useSudokuSolver();
 
-  const calculateId = (x, y) => y * BOARD_SIZE + x;
+  const calculateId = (x: number, y: number) => y * BOARD_SIZE + x;
 
-  const handleCellChange = (e, x, y) => {
+  const handleCellChange = (
+    e: ChangeEvent<HTMLInputElement>,
+    x: number,
+    y: number
+  ) => {
     e.preventDefault();
     const value = +e.target.value;
     updateCell(x, y, value >= 1 && value <= BOARD_SIZE ? value : 0);
   };
 
   return (
-    <AnimatedPage>
+    <FadeIn>
       <div className="sudoku-page">
         <h1 className="sudoku-title text-center">XudoQ Solver</h1>
         <p className="sudoku-subtitle text-center">
           Generate a puzzle by difficulty or fill in your own, then let the
           Sudoku Solver API do the rest.
         </p>
-        <div id="board">
+        <div id="board" role="grid" aria-label="Sudoku board">
           {board.map((row, y) => (
             <div
               key={`row-${y}`}
               className={`board-row${isBoxEnd(y) ? " box-end" : ""}`}
+              role="row"
             >
               {row.map((cell, x) => {
                 const given = givenCells.includes(`${calculateId(x, y)}`);
@@ -67,6 +72,9 @@ export default function SudokuSolver() {
                     min="1"
                     step="1"
                     disabled={loading}
+                    aria-label={`Row ${y + 1}, column ${x + 1}${
+                      given ? ", given" : ""
+                    }`}
                     onChange={(e) => handleCellChange(e, x, y)}
                   ></input>
                 );
@@ -84,6 +92,6 @@ export default function SudokuSolver() {
           onReset={reset}
         />
       </div>
-    </AnimatedPage>
+    </FadeIn>
   );
 }

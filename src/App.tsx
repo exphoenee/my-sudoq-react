@@ -1,7 +1,3 @@
-/* Libraries */
-import React from "react";
-
-/* Components */
 import SudokuSolver from "./Components/SudokuSolver/SudokuSolver";
 
 export default function App() {
