@@ -1,6 +1,5 @@
 /* Libraries */
 import React from "react";
-import { v4 as uuidv4 } from "uuid";
 import Alert from "react-bootstrap/Alert";
 
 /* Components */
@@ -49,21 +48,21 @@ export default function SudokuSolver() {
         <div id="board">
           {board.map((row, y) => (
             <div
-              key={uuidv4()}
+              key={`row-${y}`}
               className={`board-row${isBoxEnd(y) ? " box-end" : ""}`}
             >
               {row.map((cell, x) => {
                 const given = givenCells.includes(`${calculateId(x, y)}`);
                 return (
                   <input
-                    key={uuidv4()}
+                    key={`cell-${x}-${y}`}
                     id={`${calculateId(x, y)}`}
                     className={`tile${isBoxEnd(x) ? " box-end" : ""}${
                       given ? " given" : ""
                     }`}
                     type="number"
                     inputMode="numeric"
-                    defaultValue={cell || ""}
+                    value={cell || ""}
                     max={BOARD_SIZE}
                     min="1"
                     step="1"

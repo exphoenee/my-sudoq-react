@@ -1,6 +1,5 @@
 /* Libraries */
 import React from "react";
-import { v4 as uuidv4 } from "uuid";
 import Button from "react-bootstrap/Button";
 
 /* stylesheet */
@@ -19,7 +18,7 @@ export default function ControlPanel({ loading, onGenerate, onSolve, onReset }) 
       <div className="level-row">
         {LEVELS.map(({ level, variant }) => (
           <Button
-            key={uuidv4()}
+            key={level}
             variant={variant}
             className="level-btn"
             disabled={loading}
