@@ -1,5 +1,8 @@
 # XudoQ - Sudoku Solver (React)
 
+**Repository:** [github.com/exphoenee/my-sudoq-react](https://github.com/exphoenee/my-sudoq-react)
+**Live demo:** [xudoq.netlify.app](https://xudoq.netlify.app/)
+
 A React front end for solving and generating Sudoku puzzles. All puzzle
 solving and generation is delegated to the
 [SudokuSolver-API](https://github.com/exphoenee/SudokuSolver-API) - this app
@@ -49,5 +52,3 @@ npm start
 - https://www.npmjs.com/package/uuid
 - https://www.framer.com/docs/transition/
 - https://github.com/exphoenee/SudokuSolver-API
-
-Deployed to: https://xudoq.netlify.app/
