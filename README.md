@@ -1,4 +1,4 @@
-# SudoQ - Sudoku Solver (React)
+# XudoQ - Sudoku Solver (React)
 
 A React front end for solving and generating Sudoku puzzles. All puzzle
 solving and generation is delegated to the
@@ -19,12 +19,8 @@ src/
 │   └── MessageTypes.jsx   # alert variant constants
 ├── Components/
 │   ├── SudokuSolver/      # board UI + control panel
-│   ├── LandingPage/
-│   ├── EMailList/
-│   ├── Header/
-│   ├── Footer/
 │   └── AnimatedPage/
-└── App.jsx                # routing
+└── App.jsx                # renders SudokuSolver
 ```
 
 ## Configuration
@@ -50,8 +46,6 @@ npm start
 ## Used sources
 
 - https://react-bootstrap.github.io/getting-started/introduction/
-- https://www.tabnine.com/blog/react-router-how-to-implement-routing-in-react/
-- https://styled-components.com/
 - https://www.npmjs.com/package/uuid
 - https://www.framer.com/docs/transition/
 - https://github.com/exphoenee/SudokuSolver-API

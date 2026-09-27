@@ -41,7 +41,7 @@ export default function SudokuSolver() {
   return (
     <AnimatedPage>
       <div className="sudoku-page">
-        <h1 className="sudoku-title text-center">SudoQ Solver</h1>
+        <h1 className="sudoku-title text-center">XudoQ Solver</h1>
         <p className="sudoku-subtitle text-center">
           Generate a puzzle by difficulty or fill in your own, then let the
           Sudoku Solver API do the rest.
