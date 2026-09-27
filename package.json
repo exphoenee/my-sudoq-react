@@ -5,14 +5,12 @@
   "dependencies": {
     "axios": "^0.27.2",
     "bootstrap": "^5.2.0",
-    "dotenv": "^16.0.1",
     "framer-motion": "^6.5.1",
     "react": "^18.2.0",
     "react-bootstrap": "^2.4.0",
     "react-dom": "^18.2.0",
     "react-dotenv": "^0.1.3",
-    "react-scripts": "^5.0.1",
-    "uuid": "^8.3.2"
+    "react-scripts": "^5.0.1"
   },
   "scripts": {
     "start": "react-dotenv && react-scripts start",
@@ -43,9 +41,5 @@
       "SUDOKU_API_URL"
     ]
   },
-  "devDependencies": {
-    "@babel/plugin-proposal-class-properties": "^7.18.6",
-    "@babel/plugin-proposal-private-methods": "^7.18.6",
-    "@babel/preset-env": "^7.18.9"
-  }
+  "devDependencies": {}
 }
