@@ -20,7 +20,7 @@ interface ApiEnvelope<T> {
 
 function unwrap<T>(response: AxiosResponse<ApiEnvelope<T>>): T {
   const { success, data, error } = response.data;
-  if (!success || data === null) {
+  if (!success || data == null) {
     throw new Error(error?.message || "The Sudoku API returned an error.");
   }
   return data;
@@ -39,27 +39,31 @@ function apiErrorMessage(err: unknown, fallback: string): string {
   return (err as Error)?.message || fallback;
 }
 
+async function request<T>(
+  call: () => Promise<AxiosResponse<ApiEnvelope<T>>>,
+  fallback: string
+): Promise<T> {
+  try {
+    return unwrap(await call());
+  } catch (err) {
+    throw new Error(apiErrorMessage(err, fallback));
+  }
+}
+
 /* puzzle: comma separated string of 81 values, 0 = empty
    returns: comma separated solution string */
 export async function solveSudoku(puzzle: string): Promise<string> {
-  try {
-    const response = await sudokuApiClient.post<
-      ApiEnvelope<{ solution: string }>
-    >("/solve", { puzzle });
-    return unwrap(response).solution;
-  } catch (err) {
-    throw new Error(apiErrorMessage(err, "Could not solve the puzzle."));
-  }
+  const { solution } = await request<{ solution: string }>(
+    () => sudokuApiClient.post("/solve", { puzzle }),
+    "Could not solve the puzzle."
+  );
+  return solution;
 }
 
 /* level: "easy" | "medium" | "hard" | "evil" */
 export async function generateSudoku(level: string): Promise<GenerateResult> {
-  try {
-    const response = await sudokuApiClient.get<ApiEnvelope<GenerateResult>>(
-      `/generate/${level}`
-    );
-    return unwrap(response);
-  } catch (err) {
-    throw new Error(apiErrorMessage(err, "Could not generate a puzzle."));
-  }
+  return request<GenerateResult>(
+    () => sudokuApiClient.get(`/generate/${level}`),
+    "Could not generate a puzzle."
+  );
 }

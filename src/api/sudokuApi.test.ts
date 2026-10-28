@@ -68,4 +68,11 @@ describe("generateSudoku", () => {
       "Could not generate a puzzle."
     );
   });
+
+  it("throws a friendly message instead of a raw TypeError when success:true has no data field", async () => {
+    mockGet.mockResolvedValue({ data: { success: true, error: null } });
+    await expect(generateSudoku("easy")).rejects.toThrow(
+      "The Sudoku API returned an error."
+    );
+  });
 });

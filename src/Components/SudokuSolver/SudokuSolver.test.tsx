@@ -24,6 +24,13 @@ describe("SudokuSolver", () => {
     expect(document.activeElement).toBe(cell0);
   });
 
+  it("truncates a non-integer value instead of storing a decimal", () => {
+    render(<SudokuSolver />);
+    const cell0 = document.getElementById("0") as HTMLInputElement;
+    fireEvent.change(cell0, { target: { value: "1.5" } });
+    expect(cell0.value).toBe("1");
+  });
+
   it("Reset clears a typed value", () => {
     render(<SudokuSolver />);
     const cell0 = document.getElementById("0") as HTMLInputElement;

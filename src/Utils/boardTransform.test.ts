@@ -4,6 +4,7 @@ import {
   emptyBoard,
   boardToPuzzleString,
   puzzleStringToBoard,
+  isValidBoard,
 } from "./boardTransform";
 
 describe("emptyBoard", () => {
@@ -58,5 +59,29 @@ describe("puzzleStringToBoard", () => {
       [1, 2],
       [3, 4],
     ]);
+  });
+});
+
+describe("isValidBoard", () => {
+  it("accepts a proper 9x9 numeric board", () => {
+    expect(isValidBoard(emptyBoard())).toBe(true);
+  });
+
+  it("rejects a non-array value", () => {
+    expect(isValidBoard(null)).toBe(false);
+    expect(isValidBoard({})).toBe(false);
+  });
+
+  it("rejects an array with the wrong number of rows", () => {
+    expect(isValidBoard([[1, 2, 3]])).toBe(false);
+  });
+
+  it("rejects a board whose rows have the wrong length or non-numeric cells", () => {
+    const wrongRowLength = Array.from({ length: BOARD_SIZE }, () => [1, 2]);
+    expect(isValidBoard(wrongRowLength)).toBe(false);
+
+    const nonNumericCell = emptyBoard() as unknown as number[][];
+    (nonNumericCell[0] as unknown[])[0] = "5";
+    expect(isValidBoard(nonNumericCell)).toBe(false);
   });
 });

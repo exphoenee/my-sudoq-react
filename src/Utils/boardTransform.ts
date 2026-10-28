@@ -19,3 +19,16 @@ export function puzzleStringToBoard(puzzle: string, size = BOARD_SIZE): Board {
     values.slice(row * size, row * size + size)
   );
 }
+
+export function isValidBoard(value: unknown): value is Board {
+  return (
+    Array.isArray(value) &&
+    value.length === BOARD_SIZE &&
+    value.every(
+      (row) =>
+        Array.isArray(row) &&
+        row.length === BOARD_SIZE &&
+        row.every((cell) => typeof cell === "number")
+    )
+  );
+}
